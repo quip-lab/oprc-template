@@ -1,5 +1,6 @@
 {
     "$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
+    "extends": ["./packages/biome-config/biome.json"],
     "vcs": {
         "enabled": true,
         "clientKind": "git",
@@ -8,30 +9,5 @@
     "files": {
         "ignoreUnknown": false,
         "includes": ["**", "!**/public"]
-    },
-    "formatter": {
-        "enabled": true,
-        "indentStyle": "space",
-        "indentWidth": 4
-    },
-    "linter": {
-        "enabled": true,
-        "rules": {
-            "preset": "recommended"
-        }
-    },
-    "javascript": {
-        "formatter": {
-            "quoteStyle": "double",
-            "semicolons": "always"
-        }
-    },
-    "assist": {
-        "enabled": true,
-        "actions": {
-            "source": {
-                "organizeImports": "on"
-            }
-        }
     }
 }
