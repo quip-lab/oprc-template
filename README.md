@@ -16,8 +16,7 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
+- `web`: a [TanStack Start](https://tanstack.com/start) app
 - `@repo/biome-config`: shared Biome configuration used by the workspace root
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 

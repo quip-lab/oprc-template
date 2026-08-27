@@ -8,6 +8,6 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "includes": ["**", "!**/public"]
+        "includes": ["**", "!**/public", "!**/routeTree.gen.ts"]
     }
 }
