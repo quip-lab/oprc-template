@@ -1,7 +1,11 @@
 {
     "$schema": "https://turborepo.dev/schema.json",
     "ui": "tui",
-    "globalDependencies": ["biome.json", "packages/biome-config/biome.json"],
+    "globalDependencies": [
+        "biome.json",
+        "apps/*/biome.json",
+        "packages/biome-config/biome.json"
+    ],
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
