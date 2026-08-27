@@ -4,6 +4,9 @@ packages:
 catalog:
   "@biomejs/biome": ^2.5.11
   typescript: 7.0.2
+catalogs:
+  expo:
+    typescript: ~6.0.3
 minimumReleaseAgeExclude:
   - "@biomejs/biome@2.5.11"
   - "@biomejs/cli-darwin-arm64@2.5.11"
