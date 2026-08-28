@@ -7,6 +7,8 @@
         "@expo/ui": "~57.0.14",
         "@orpc/client": "catalog:",
         "@repo/api": "workspace:*",
+        "@orpc/tanstack-query": "catalog:",
+        "@tanstack/react-query": "catalog:",
         "better-auth": "catalog:",
         "expo": "~57.0.17",
         "expo-constants": "~57.0.15",

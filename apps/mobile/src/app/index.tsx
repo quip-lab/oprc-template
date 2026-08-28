@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { Button, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,27 +15,16 @@ export default function HomeScreen() {
     const [password, setPassword] = useState("");
     const [isSignUp, setIsSignUp] = useState(true);
     const [message, setMessage] = useState<string>();
-    const [apiStatus, setApiStatus] = useState("Checking API…");
-    const [apiUser, setApiUser] = useState<string>();
-
-    useEffect(() => {
-        void orpc
-            .health()
-            .then(() => setApiStatus("API connected"))
-            .catch(() => setApiStatus("API unavailable"));
-    }, []);
-
-    useEffect(() => {
-        if (!session) {
-            setApiUser(undefined);
-            return;
-        }
-
-        void orpc.auth
-            .me()
-            .then((user) => setApiUser(user.email))
-            .catch(() => setApiUser(undefined));
-    }, [session]);
+    const healthQuery = useQuery(orpc.health.queryOptions());
+    const meQuery = useQuery({
+        ...orpc.auth.me.queryOptions(),
+        enabled: Boolean(session),
+    });
+    const apiStatus = healthQuery.isSuccess
+        ? "API connected"
+        : healthQuery.isError
+          ? "API unavailable"
+          : "Checking API…";
 
     async function authenticate() {
         setMessage(undefined);
@@ -66,8 +56,8 @@ export default function HomeScreen() {
                     <ThemedText>{session.user.email}</ThemedText>
                     <ThemedText>{apiStatus}</ThemedText>
                     <ThemedText>
-                        {apiUser
-                            ? `oRPC session: ${apiUser}`
+                        {meQuery.data
+                            ? `oRPC session: ${meQuery.data.email}`
                             : "Checking oRPC session…"}
                     </ThemedText>
                     <Button

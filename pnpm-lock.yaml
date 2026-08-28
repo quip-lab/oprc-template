@@ -18,6 +18,12 @@ catalogs:
     '@orpc/server':
       specifier: ^1.15.0
       version: 1.15.0
+    '@orpc/tanstack-query':
+      specifier: ^1.15.0
+      version: 1.15.0
+    '@tanstack/react-query':
+      specifier: ^5.102.8
+      version: 5.102.8
     '@types/node':
       specifier: ^26.4.0
       version: 26.4.0
@@ -90,9 +96,15 @@ importers:
       '@orpc/client':
         specifier: 'catalog:'
         version: 1.15.0
+      '@orpc/tanstack-query':
+        specifier: 'catalog:'
+        version: 1.15.0(@orpc/client@1.15.0)(@tanstack/query-core@5.102.8)
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.102.8(react@19.2.3)
       better-auth:
         specifier: 'catalog:'
         version: 1.7.2(@tanstack/react-start@1.168.49(esbuild@0.28.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rolldown@1.2.6)(supports-color@8.1.1)(vite@8.2.2(@types/node@26.4.0)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.51.0)(tsx@4.23.12)(yaml@2.9.0)))(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@types/pg@8.23.1)(kysely@0.29.5)(pg@8.23.0))(pg@8.23.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(solid-js@1.9.15)
@@ -193,6 +205,9 @@ importers:
       '@orpc/server':
         specifier: 'catalog:'
         version: 1.15.0(ws@8.21.3)
+      '@orpc/tanstack-query':
+        specifier: 'catalog:'
+        version: 1.15.0(@orpc/client@1.15.0)(@tanstack/query-core@5.102.8)
       '@repo/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -205,6 +220,9 @@ importers:
       '@tanstack/react-devtools':
         specifier: latest
         version: 0.10.12(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(csstype@3.2.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(solid-js@1.9.15)
+      '@tanstack/react-query':
+        specifier: 'catalog:'
+        version: 5.102.8(react@19.2.8)
       '@tanstack/react-router':
         specifier: latest
         version: 1.170.32(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -1701,6 +1719,12 @@ packages:
   '@orpc/standard-server@1.15.0':
     resolution: {integrity: sha512-bje/xn6thDqJY/JQ7xoOjmD1KWE4FsyZOPgnPxwqTZLx/r00stRhLuFvk1hDEGj9UlG7NLZEijDVx0wqvcyDzA==}
 
+  '@orpc/tanstack-query@1.15.0':
+    resolution: {integrity: sha512-Dp2JXqdmmRjBQu21Cq6oGBhxJF0Gel5ao5qMdOSYpVb5RjdqAEaXsDO9VMj1nEj6SseKGfm9pk10ZIskuI1jjg==}
+    peerDependencies:
+      '@orpc/client': 1.15.0
+      '@tanstack/query-core': '>=5.80.2'
+
   '@oxc-parser/binding-android-arm-eabi@0.120.0':
     resolution: {integrity: sha512-WU3qtINx802wOl8RxAF1v0VvmC2O4D9M8Sv486nLeQ7iPHVmncYZrtBhB4SYyX+XZxj2PNnCcN+PW21jHgiOxg==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -2408,6 +2432,9 @@ packages:
     resolution: {integrity: sha512-DR9t6lfLVdrjgCwpglrR9DR7Ok8/HlXjcOE+goWXF3zyuLUO/ug7vMbSFxTqrQTtbRghJfyhmIZ0S6LhPIy44w==}
     engines: {node: '>=20.19'}
 
+  '@tanstack/query-core@5.102.8':
+    resolution: {integrity: sha512-ZNjkJ33CqvPNec/6lZBnHqLc3EVGPZ9ySLhYahU9TcuRFdmwXewuj0c4hwSWcGHqEUwcSrKeZ+oGcvPBqXcQcg==}
+
   '@tanstack/react-devtools@0.10.12':
     resolution: {integrity: sha512-dgoz7TFm97Izo/D34z91PD0h+ufk+eBmoN9OgRHJlj/c7Ol5xpIP7bqLBNByjgt5paRE2eSu5AQHV92Ul+G6iw==}
     engines: {node: '>=18'}
@@ -2416,6 +2443,11 @@ packages:
       '@types/react-dom': '>=16.8'
       react: '>=16.8'
       react-dom: '>=16.8'
+
+  '@tanstack/react-query@5.102.8':
+    resolution: {integrity: sha512-TYBea4OuXWD7MhaSHq069TWbFe7rcwWN6kzT7JF0OKi1K6c1gTv2IzD6A6ExJsCMozdkqBWeuIUZmu4KQg0O5A==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tanstack/react-router-devtools@1.167.1':
     resolution: {integrity: sha512-pjfGrmjj4d7naEPM7oshqFfwBoxDPNo/UxltlHH5ePbHsJ+plBhd+JaAewm1ueYOjZ0js9hckjWWDYXpCrSfKw==}
@@ -7039,6 +7071,14 @@ snapshots:
     transitivePeerDependencies:
       - '@opentelemetry/api'
 
+  '@orpc/tanstack-query@1.15.0(@orpc/client@1.15.0)(@tanstack/query-core@5.102.8)':
+    dependencies:
+      '@orpc/client': 1.15.0
+      '@orpc/shared': 1.15.0
+      '@tanstack/query-core': 5.102.8
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+
   '@oxc-parser/binding-android-arm-eabi@0.120.0':
     optional: true
 
@@ -7903,6 +7943,8 @@ snapshots:
 
   '@tanstack/history@1.162.1': {}
 
+  '@tanstack/query-core@5.102.8': {}
+
   '@tanstack/react-devtools@0.10.12(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(csstype@3.2.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(solid-js@1.9.15)':
     dependencies:
       '@tanstack/devtools': 0.14.2(csstype@3.2.3)(solid-js@1.9.15)
@@ -7915,6 +7957,16 @@ snapshots:
       - csstype
       - solid-js
       - utf-8-validate
+
+  '@tanstack/react-query@5.102.8(react@19.2.3)':
+    dependencies:
+      '@tanstack/query-core': 5.102.8
+      react: 19.2.3
+
+  '@tanstack/react-query@5.102.8(react@19.2.8)':
+    dependencies:
+      '@tanstack/query-core': 5.102.8
+      react: 19.2.8
 
   '@tanstack/react-router-devtools@1.167.1(@tanstack/react-router@1.170.32(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@tanstack/router-core@1.171.27)(csstype@3.2.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
