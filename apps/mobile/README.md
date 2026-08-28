@@ -14,12 +14,8 @@ pnpm --filter mobile android
 pnpm --filter mobile web
 ```
 
-These commands explicitly launch Expo Go. To use the EAS `development` profile,
-first install its development build on the simulator/device, then run:
-
-```sh
-pnpm --filter mobile dev:client
-```
+These commands target the custom development build. Build and install it once
+before scanning the development QR code.
 
 Start the web workspace separately before signing in or making RPC calls:
 
@@ -102,6 +98,22 @@ EAS configure flow from this workspace to link the Expo project.
 
 ```sh
 pnpm --dir apps/mobile dlx eas-cli@22.6.0 build:configure
+```
+
+To use a development build on an iPhone, register the device and create the
+first internal iOS build. Install it from the EAS build link, then use the
+normal `pnpm --filter mobile dev` command and scan its QR code.
+
+```sh
+pnpm --dir apps/mobile dlx eas-cli@22.6.0 device:create
+pnpm --filter mobile eas:build:development --platform ios
+```
+
+On a Mac with Xcode, you can instead compile and install the development build
+locally. This generates the native `ios/` project if it is not present.
+
+```sh
+pnpm --filter mobile exec expo run:ios --device
 ```
 
 Set `EXPO_PUBLIC_API_URL` in EAS for each applicable environment. It is safe to
