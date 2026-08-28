@@ -6,6 +6,7 @@
     "exports": {
         ".": {
             "react-native": "./src/index.native.ts",
+            "browser": "./src/index.native.ts",
             "default": "./src/index.ts"
         }
     },

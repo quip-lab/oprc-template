@@ -60,7 +60,6 @@
         "eas:build:preview": "pnpm dlx eas-cli@22.6.0 build --profile preview",
         "eas:build:production": "pnpm dlx eas-cli@22.6.0 build --profile production",
         "eas:submit": "pnpm dlx eas-cli@22.6.0 submit --profile production",
-        "reset-project": "node ./scripts/reset-project.js",
         "android": "pnpm run with-env expo start --android",
         "ios": "pnpm run with-env expo start --ios",
         "web": "pnpm run with-env expo start --web",

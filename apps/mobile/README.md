@@ -37,7 +37,7 @@ The localhost fallback works for simulators. A standalone build reads
 | `src/lib/orpc.ts` | Typed RPC client that forwards the stored auth cookie. |
 | `src/lib/base-url.ts` | Development LAN address discovery. |
 | `src/lib/query-client.ts` | Browser/mobile singleton `QueryClient`. |
-| `src/components/` | Reusable UI components. |
+| `src/components/` | Expo Router tab shell. Standard interface components come from HeroUI Native. |
 
 ## UI
 
@@ -51,6 +51,10 @@ Mobile screens use HeroUI Native components from `heroui-native`. The required
 
 After changing Tailwind configuration, restart Expo/Metro so Uniwind can
 regenerate its type definitions.
+
+Expo web uses its client-only output. The primary web application is the
+TanStack Start workspace, so static rendering is intentionally not enabled for
+this companion client.
 
 ## Authentication and data
 
