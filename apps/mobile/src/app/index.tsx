@@ -1,73 +1,103 @@
-import * as Device from "expo-device";
-import { Platform, StyleSheet } from "react-native";
+import { useState } from "react";
+import { Button, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from "@/components/animated-icon";
-import { HintRow } from "@/components/hint-row";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { WebBadge } from "@/components/web-badge";
-import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
-
-function getDevMenuHint() {
-    if (Platform.OS === "web") {
-        return <ThemedText type="small">use browser devtools</ThemedText>;
-    }
-    if (Device.isDevice) {
-        return (
-            <ThemedText type="small">
-                shake device or press <ThemedText type="code">m</ThemedText> in
-                terminal
-            </ThemedText>
-        );
-    }
-    const shortcut = Platform.OS === "android" ? "cmd+m (or ctrl+m)" : "cmd+d";
-    return (
-        <ThemedText type="small">
-            press <ThemedText type="code">{shortcut}</ThemedText>
-        </ThemedText>
-    );
-}
+import { authClient } from "@/lib/auth-client";
 
 export default function HomeScreen() {
+    const { data: session, isPending } = authClient.useSession();
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [isSignUp, setIsSignUp] = useState(true);
+    const [message, setMessage] = useState<string>();
+
+    async function authenticate() {
+        setMessage(undefined);
+
+        const result = isSignUp
+            ? await authClient.signUp.email({ email, name, password })
+            : await authClient.signIn.email({ email, password });
+
+        if (result.error) {
+            setMessage(result.error.message ?? "Unable to authenticate.");
+        }
+    }
+
+    if (isPending) {
+        return (
+            <ThemedView style={styles.container}>
+                <ThemedText>Loading session…</ThemedText>
+            </ThemedView>
+        );
+    }
+
+    if (session) {
+        return (
+            <ThemedView style={styles.container}>
+                <SafeAreaView style={styles.content}>
+                    <ThemedText type="title">
+                        Welcome, {session.user.name}
+                    </ThemedText>
+                    <ThemedText>{session.user.email}</ThemedText>
+                    <Button
+                        onPress={() => authClient.signOut()}
+                        title="Sign out"
+                    />
+                </SafeAreaView>
+            </ThemedView>
+        );
+    }
+
     return (
         <ThemedView style={styles.container}>
-            <SafeAreaView style={styles.safeArea}>
-                <ThemedView style={styles.heroSection}>
-                    <AnimatedIcon />
-                    <ThemedText type="title" style={styles.title}>
-                        Welcome to&nbsp;Expo
-                    </ThemedText>
-                </ThemedView>
-
-                <ThemedText type="code" style={styles.code}>
-                    get started
+            <SafeAreaView style={styles.content}>
+                <ThemedText type="title">
+                    {isSignUp ? "Create an account" : "Sign in"}
                 </ThemedText>
-
-                <ThemedView
-                    type="backgroundElement"
-                    style={styles.stepContainer}
-                >
-                    <HintRow
-                        title="Try editing"
-                        hint={
-                            <ThemedText type="code">
-                                src/app/index.tsx
-                            </ThemedText>
-                        }
+                {isSignUp && (
+                    <TextInput
+                        autoCapitalize="words"
+                        onChangeText={setName}
+                        placeholder="Name"
+                        style={styles.input}
+                        value={name}
                     />
-                    <HintRow title="Dev tools" hint={getDevMenuHint()} />
-                    <HintRow
-                        title="Fresh start"
-                        hint={
-                            <ThemedText type="code">
-                                npm run reset-project
-                            </ThemedText>
-                        }
-                    />
-                </ThemedView>
-
-                {Platform.OS === "web" && <WebBadge />}
+                )}
+                <TextInput
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    keyboardType="email-address"
+                    onChangeText={setEmail}
+                    placeholder="Email"
+                    style={styles.input}
+                    value={email}
+                />
+                <TextInput
+                    autoComplete={
+                        isSignUp ? "new-password" : "current-password"
+                    }
+                    onChangeText={setPassword}
+                    placeholder="Password"
+                    secureTextEntry
+                    style={styles.input}
+                    value={password}
+                />
+                {message && <ThemedText>{message}</ThemedText>}
+                <Button
+                    onPress={authenticate}
+                    title={isSignUp ? "Create account" : "Sign in"}
+                />
+                <Button
+                    onPress={() => setIsSignUp((value) => !value)}
+                    title={
+                        isSignUp
+                            ? "Already have an account? Sign in"
+                            : "Need an account? Sign up"
+                    }
+                />
             </SafeAreaView>
         </ThemedView>
     );
@@ -76,35 +106,17 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        flexDirection: "row",
     },
-    safeArea: {
+    content: {
         flex: 1,
-        paddingHorizontal: Spacing.four,
-        alignItems: "center",
-        gap: Spacing.three,
-        paddingBottom: BottomTabInset + Spacing.three,
-        maxWidth: MaxContentWidth,
-    },
-    heroSection: {
-        alignItems: "center",
+        gap: 16,
         justifyContent: "center",
-        flex: 1,
-        paddingHorizontal: Spacing.four,
-        gap: Spacing.four,
+        padding: 24,
     },
-    title: {
-        textAlign: "center",
-    },
-    code: {
-        textTransform: "uppercase",
-    },
-    stepContainer: {
-        gap: Spacing.three,
-        alignSelf: "stretch",
-        paddingHorizontal: Spacing.three,
-        paddingVertical: Spacing.four,
-        borderRadius: Spacing.four,
+    input: {
+        borderColor: "#9ca3af",
+        borderRadius: 8,
+        borderWidth: 1,
+        padding: 12,
     },
 });

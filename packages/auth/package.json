@@ -1,0 +1,26 @@
+{
+    "name": "@repo/auth",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "auth:generate": "auth generate --adapter drizzle --dialect postgresql --output ../db/src/schema/auth.ts --yes",
+        "check-types": "tsc --noEmit",
+        "lint": "biome lint ."
+    },
+    "dependencies": {
+        "@better-auth/expo": "catalog:",
+        "@repo/db": "workspace:*",
+        "better-auth": "catalog:",
+        "dotenv": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "@types/node": "catalog:",
+        "auth": "catalog:",
+        "typescript": "catalog:"
+    }
+}
