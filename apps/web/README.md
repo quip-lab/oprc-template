@@ -35,6 +35,13 @@ pnpm --filter web check-types
 | `src/lib/query-client.ts` | Per-request server query client and browser singleton. |
 | `src/routeTree.gen.ts` | Generated router file; do not edit. |
 
+## UI
+
+The web UI uses `@heroui/react` with `@heroui/styles`. The stylesheet import is
+in `src/styles.css`, immediately after Tailwind's import. HeroUI v3 does not
+need a provider: compose its accessible controls directly using parts such as
+`Card.Header`, `TextField`, `Input`, and `Button`.
+
 ## Data and auth
 
 Use the exported `orpc` helper rather than constructing endpoint-specific

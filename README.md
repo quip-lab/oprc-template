@@ -5,8 +5,9 @@
 # oRPC full-stack template
 
 A pnpm + Turborepo workspace for a TanStack Start web app and an Expo mobile
-app. Both clients share a type-safe oRPC API, Better Auth session model, Drizzle
-schema, and PostgreSQL database.
+app. The web UI uses HeroUI and the native app uses HeroUI Native. Both clients
+share a type-safe oRPC API, Better Auth session model, Drizzle schema, and
+PostgreSQL database.
 
 Built by Quip.
 
