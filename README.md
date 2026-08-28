@@ -79,6 +79,7 @@ through `dotenv-cli` when run from their package directory.
 | `BETTER_AUTH_URL` | Yes | Public origin handled by Better Auth, such as `http://localhost:3000`. |
 | `VITE_AUTH_URL` | Web client | Browser-facing Better Auth origin; keep it aligned with `BETTER_AUTH_URL` locally. |
 | `EXPO_PUBLIC_API_URL` | Mobile release | Public API origin embedded in EAS preview/production mobile builds. |
+| `EXPO_APP_IDENTIFIER` | Mobile release | Unique reverse-DNS iOS/Android identifier; change before distributing the app. |
 
 The mobile app intentionally does not use an `EXPO_PUBLIC_AUTH_URL`. During
 development it derives the LAN host from Metro and connects to port `3000`.

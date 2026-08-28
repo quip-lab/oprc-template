@@ -76,9 +76,9 @@ update from the shared router automatically.
 
 ## Configuration
 
-`app.config.ts` defines the `mobile` URL scheme, icons, splash screen,
-`expo-router`, `expo-secure-store`, and the public API origin. The app has its
-own `biome.json` so Expo assets stay outside code-quality checks.
+`app.config.ts` defines the app identifiers, `mobile` URL scheme, icons, splash
+screen, `expo-router`, `expo-secure-store`, and the public API origin. The app
+has its own `biome.json` so Expo assets stay outside code-quality checks.
 
 ## EAS builds and submission
 
@@ -88,9 +88,10 @@ own `biome.json` so Expo assets stay outside code-quality checks.
 - `preview` builds are production-like internal builds.
 - `production` builds target the app stores.
 
-Before the first cloud build, run the EAS configure flow from this workspace.
-It links the Expo project and asks for the permanent iOS bundle identifier and
-Android package name; do not ship the template `mobile` identifiers.
+Before distributing a native build, set `EXPO_APP_IDENTIFIER` to a unique
+reverse-DNS identifier you own. It is shared by iOS and Android and defaults to
+`com.quip.oprctemplate` so `expo start --ios` works out of the box. Then run the
+EAS configure flow from this workspace to link the Expo project.
 
 ```sh
 pnpm --dir apps/mobile dlx eas-cli@22.6.0 build:configure
