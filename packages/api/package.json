@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@orpc/server": "catalog:",
+        "@repo/auth": "workspace:*",
         "@repo/db": "workspace:*",
         "zod": "catalog:"
     },

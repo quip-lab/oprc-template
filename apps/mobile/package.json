@@ -5,6 +5,10 @@
     "dependencies": {
         "@better-auth/expo": "catalog:",
         "@expo/ui": "~57.0.14",
+        "@orpc/client": "catalog:",
+        "@repo/api": "workspace:*",
+        "@orpc/tanstack-query": "catalog:",
+        "@tanstack/react-query": "catalog:",
         "better-auth": "catalog:",
         "expo": "~57.0.17",
         "expo-constants": "~57.0.15",
@@ -32,6 +36,7 @@
         "react-native-worklets": "0.10.1"
     },
     "devDependencies": {
+        "@orpc/server": "catalog:",
         "@types/node": "catalog:",
         "@types/react": "~19.2.2",
         "dotenv-cli": "catalog:",

@@ -10,7 +10,7 @@ if (!databaseUrl) {
     throw new Error("DATABASE_URL is required to initialize Better Auth.");
 }
 
-const { db } = createDatabase(databaseUrl);
+export const { db } = createDatabase(databaseUrl);
 
 export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",

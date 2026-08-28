@@ -1,7 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { type FormEvent, useState } from "react";
 
 import { authClient } from "#/lib/auth-client";
+import { orpc } from "#/lib/orpc";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -12,6 +14,16 @@ function Home() {
     const [password, setPassword] = useState("");
     const [isSignUp, setIsSignUp] = useState(true);
     const [message, setMessage] = useState<string>();
+    const healthQuery = useQuery(orpc.health.queryOptions());
+    const meQuery = useQuery({
+        ...orpc.auth.me.queryOptions(),
+        enabled: Boolean(session),
+    });
+    const apiStatus = healthQuery.isSuccess
+        ? "API connected"
+        : healthQuery.isError
+          ? "API unavailable"
+          : "Checking API…";
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -37,6 +49,12 @@ function Home() {
                     Welcome, {session.user.name}
                 </h1>
                 <p className="mt-4 text-lg">{session.user.email}</p>
+                <p className="mt-2 text-sm text-gray-600">{apiStatus}</p>
+                <p className="mt-1 text-sm text-gray-600">
+                    {meQuery.data
+                        ? `oRPC session: ${meQuery.data.email}`
+                        : "Checking oRPC session…"}
+                </p>
                 <button
                     className="mt-6 rounded bg-black px-4 py-2 text-white"
                     onClick={() => authClient.signOut()}
@@ -53,6 +71,7 @@ function Home() {
             <h1 className="text-4xl font-bold">
                 {isSignUp ? "Create an account" : "Sign in"}
             </h1>
+            <p className="mt-2 text-sm text-gray-600">{apiStatus}</p>
             <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                 {isSignUp && (
                     <input

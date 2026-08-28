@@ -15,11 +15,16 @@
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
+        "@orpc/client": "catalog:",
+        "@orpc/server": "catalog:",
+        "@orpc/tanstack-query": "catalog:",
         "@tailwindcss/vite": "^4.3.3",
         "@tanstack/react-devtools": "latest",
         "@tanstack/react-router": "latest",
         "@tanstack/react-router-devtools": "latest",
         "@tanstack/react-start": "latest",
+        "@tanstack/react-query": "catalog:",
+        "@repo/api": "workspace:*",
         "@repo/auth": "workspace:*",
         "better-auth": "catalog:",
         "react": "^19.2.8",
