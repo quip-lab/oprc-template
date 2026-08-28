@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="assets/quip.png" alt="Quip" width="160" />
+</p>
+
 # oRPC full-stack template
 
 A pnpm + Turborepo workspace for a TanStack Start web app and an Expo mobile
 app. Both clients share a type-safe oRPC API, Better Auth session model, Drizzle
 schema, and PostgreSQL database.
+
+Built by Quip.
 
 ## Workspace layout
 
