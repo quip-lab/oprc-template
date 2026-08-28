@@ -10,12 +10,12 @@ permissions:
     contents: read
 
 concurrency:
-    group: husky-${{ github.workflow }}-${{ github.ref }}
+    group: pre-commit-${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
-    husky:
-        name: husky
+    pre-commit:
+        name: pre-commit
         runs-on: blacksmith-2vcpu-ubuntu-2404
         timeout-minutes: 15
 
@@ -44,13 +44,13 @@ jobs:
             - name: Build workspace
               run: pnpm build
 
-    required:
-        name: required
+    all-green:
+        name: all-green
         if: always()
-        needs: [husky]
+        needs: [pre-commit]
         runs-on: blacksmith-2vcpu-ubuntu-2404
         steps:
-            - name: Require successful checks
+            - name: Check for successful checks
               env:
-                  PRE_COMMIT_RESULT: ${{ needs.husky.result }}
+                  PRE_COMMIT_RESULT: ${{ needs.pre-commit.result }}
               run: test "$PRE_COMMIT_RESULT" = "success"
