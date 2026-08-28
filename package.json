@@ -5,6 +5,7 @@
         "build": "turbo run build",
         "dev": "pnpm run with-env turbo run dev",
         "with-env": "dotenv -e .env --",
+        "prepare": "husky",
         "db:generate": "pnpm --filter @repo/db db:generate",
         "db:migrate": "pnpm --filter @repo/db db:migrate",
         "lint": "turbo run lint",
@@ -17,8 +18,13 @@
         "@biomejs/biome": "catalog:",
         "@repo/biome-config": "workspace:*",
         "dotenv-cli": "catalog:",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.3.0",
         "turbo": "^2.10.12",
         "typescript": "catalog:"
+    },
+    "lint-staged": {
+        "**/*.{js,cjs,mjs,ts,tsx,jsx,json,jsonc,css,md,yaml,yml}": "biome check --write"
     },
     "packageManager": "pnpm@11.23.0",
     "engines": {
