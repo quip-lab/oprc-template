@@ -24,8 +24,8 @@ For Expo Go or a physical development build, the device and development
 machine must share a LAN. `src/lib/base-url.ts` gets Metro's LAN host at
 runtime and targets port `3000`; no `EXPO_PUBLIC_AUTH_URL` is needed.
 
-The localhost fallback works for simulators. A standalone production build
-needs a deployed API origin configured in `getBaseUrl`.
+The localhost fallback works for simulators. A standalone build reads
+`EXPO_PUBLIC_API_URL` from Expo config and uses that deployed origin instead.
 
 ## Structure
 
@@ -73,8 +73,40 @@ update from the shared router automatically.
 ## Configuration
 
 `app.config.ts` defines the `mobile` URL scheme, icons, splash screen,
-`expo-router`, and `expo-secure-store`. The app has its own `biome.json` so
-Expo assets stay outside code-quality checks.
+`expo-router`, `expo-secure-store`, and the public API origin. The app has its
+own `biome.json` so Expo assets stay outside code-quality checks.
+
+## EAS builds and submission
+
+`eas.json` provides the standard Expo profiles:
+
+- `development` builds include the dev client and are internally distributed.
+- `preview` builds are production-like internal builds.
+- `production` builds target the app stores.
+
+Before the first cloud build, run the EAS configure flow from this workspace.
+It links the Expo project and asks for the permanent iOS bundle identifier and
+Android package name; do not ship the template `mobile` identifiers.
+
+```sh
+pnpm --dir apps/mobile dlx eas-cli@22.6.0 build:configure
+```
+
+Set `EXPO_PUBLIC_API_URL` in EAS for each applicable environment. It is safe to
+be public because it is embedded in the client; never place credentials in an
+`EXPO_PUBLIC_` variable.
+
+```sh
+pnpm --dir apps/mobile dlx eas-cli@22.6.0 env:set \
+    --name EXPO_PUBLIC_API_URL \
+    --value https://api.example.com \
+    --environment production \
+    --visibility plaintext
+
+pnpm --filter mobile eas:build:preview
+pnpm --filter mobile eas:build:production
+pnpm --filter mobile eas:submit
+```
 
 ```sh
 pnpm --filter mobile check-types
