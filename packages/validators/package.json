@@ -1,0 +1,23 @@
+{
+    "name": "@repo/validators",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": {
+            "react-native": "./src/index.native.ts",
+            "default": "./src/index.ts"
+        }
+    },
+    "scripts": {
+        "check-types": "tsc --noEmit",
+        "lint": "biome lint ."
+    },
+    "dependencies": {
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "typescript": "catalog:"
+    }
+}

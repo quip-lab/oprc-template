@@ -61,6 +61,10 @@ const meQuery = useQuery({
 requests include browser cookies; `src/lib/orpc.ts` also explicitly uses
 `credentials: "include"` so authenticated RPC calls receive the session.
 
+Authentication fields are managed with React Hook Form and validated through
+the shared Zod schemas in `@repo/validators`. Follow the same pattern for any
+new user-input form.
+
 ## Environment
 
 `VITE_AUTH_URL` defaults to `http://localhost:3000`. Set it to the public web

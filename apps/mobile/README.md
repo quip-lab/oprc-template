@@ -59,6 +59,9 @@ The Better Auth Expo plugin persists the session cookie using
 in the request headers, so server procedures protected by `authorized` receive
 the same session as the web app.
 
+Authentication fields use React Hook Form with the shared Zod schemas from
+`@repo/validators`; use the same combination for every new mobile form.
+
 ```tsx
 const { data: session } = authClient.useSession();
 const healthQuery = useQuery(orpc.health.queryOptions());

@@ -5,8 +5,10 @@
     "dependencies": {
         "@better-auth/expo": "catalog:",
         "@expo/ui": "~57.0.14",
+        "@hookform/resolvers": "catalog:",
         "@orpc/client": "catalog:",
         "@repo/api": "workspace:*",
+        "@repo/validators": "workspace:*",
         "@orpc/tanstack-query": "catalog:",
         "@tanstack/react-query": "catalog:",
         "better-auth": "catalog:",
@@ -28,6 +30,7 @@
         "heroui-native": "catalog:",
         "react": "19.2.8",
         "react-dom": "19.2.8",
+        "react-hook-form": "catalog:",
         "react-native": "0.86.3",
         "react-native-gesture-handler": "~3.2.1",
         "react-native-reanimated": "4.5.1",
