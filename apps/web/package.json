@@ -15,6 +15,7 @@
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
+        "@hookform/resolvers": "catalog:",
         "@heroui/react": "catalog:",
         "@heroui/styles": "catalog:",
         "@orpc/client": "catalog:",
@@ -28,9 +29,11 @@
         "@tanstack/react-query": "catalog:",
         "@repo/api": "workspace:*",
         "@repo/auth": "workspace:*",
+        "@repo/validators": "workspace:*",
         "better-auth": "catalog:",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
+        "react-hook-form": "catalog:",
         "tailwindcss": "^4.3.3"
     },
     "devDependencies": {

@@ -2,26 +2,32 @@ import {
     Alert,
     Button,
     Card,
+    FieldError,
     Form,
     Input,
     Label,
     Spinner,
     TextField,
 } from "@heroui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    type SignInFormValues,
+    type SignUpFormValues,
+    signInSchema,
+    signUpSchema,
+} from "@repo/validators";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { type FormEvent, useState } from "react";
+import { useState } from "react";
+import { type Control, Controller, type Path, useForm } from "react-hook-form";
 
 import { authClient } from "#/lib/auth-client";
 import { orpc } from "#/lib/orpc";
 
 export const Route = createFileRoute("/")({ component: Home });
 
-function Home() {
+export function Home() {
     const { data: session, isPending } = authClient.useSession();
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
     const [isSignUp, setIsSignUp] = useState(true);
     const [message, setMessage] = useState<string>();
     const healthQuery = useQuery(orpc.health.queryOptions());
@@ -35,16 +41,31 @@ function Home() {
           ? "API unavailable"
           : "Checking API…";
 
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
+    async function signIn(values: SignInFormValues) {
         setMessage(undefined);
 
-        const result = isSignUp
-            ? await authClient.signUp.email({ email, name, password })
-            : await authClient.signIn.email({ email, password });
+        try {
+            const result = await authClient.signIn.email(values);
 
-        if (result.error) {
-            setMessage(result.error.message ?? "Unable to authenticate.");
+            if (result.error) {
+                setMessage(result.error.message ?? "Unable to authenticate.");
+            }
+        } catch {
+            setMessage("Unable to authenticate. Please try again.");
+        }
+    }
+
+    async function signUp(values: SignUpFormValues) {
+        setMessage(undefined);
+
+        try {
+            const result = await authClient.signUp.email(values);
+
+            if (result.error) {
+                setMessage(result.error.message ?? "Unable to authenticate.");
+            }
+        } catch {
+            setMessage("Unable to authenticate. Please try again.");
         }
     }
 
@@ -70,25 +91,16 @@ function Home() {
                         </Card.Description>
                     </Card.Header>
                     <Card.Content>
-                        <Alert
-                            status={
-                                healthQuery.isSuccess
-                                    ? "success"
-                                    : healthQuery.isError
-                                      ? "danger"
-                                      : "accent"
+                        <ConnectionAlert
+                            detail={
+                                meQuery.data
+                                    ? `oRPC session: ${meQuery.data.email}`
+                                    : "Checking your oRPC session…"
                             }
-                        >
-                            <Alert.Indicator />
-                            <Alert.Content>
-                                <Alert.Title>{apiStatus}</Alert.Title>
-                                <Alert.Description>
-                                    {meQuery.data
-                                        ? `oRPC session: ${meQuery.data.email}`
-                                        : "Checking your oRPC session…"}
-                                </Alert.Description>
-                            </Alert.Content>
-                        </Alert>
+                            isError={healthQuery.isError}
+                            isSuccess={healthQuery.isSuccess}
+                            title={apiStatus}
+                        />
                     </Card.Content>
                     <Card.Footer>
                         <Button
@@ -116,92 +128,213 @@ function Home() {
                         Use your email and password to continue.
                     </Card.Description>
                 </Card.Header>
-                <Form className="contents" onSubmit={handleSubmit}>
-                    <Card.Content className="flex flex-col gap-4">
-                        <Alert
-                            status={
-                                healthQuery.isSuccess
-                                    ? "success"
-                                    : healthQuery.isError
-                                      ? "danger"
-                                      : "accent"
-                            }
-                        >
-                            <Alert.Indicator />
-                            <Alert.Content>
-                                <Alert.Title>{apiStatus}</Alert.Title>
-                            </Alert.Content>
-                        </Alert>
-                        {isSignUp && (
-                            <TextField
-                                fullWidth
-                                isRequired
-                                name="name"
-                                onChange={setName}
-                                value={name}
-                            >
-                                <Label>Name</Label>
-                                <Input placeholder="Your name" />
-                            </TextField>
-                        )}
-                        <TextField
-                            fullWidth
-                            isRequired
-                            name="email"
-                            onChange={setEmail}
-                            type="email"
-                            value={email}
-                        >
-                            <Label>Email</Label>
-                            <Input placeholder="you@example.com" />
-                        </TextField>
-                        <TextField
-                            fullWidth
-                            isRequired
-                            name="password"
-                            onChange={setPassword}
-                            type="password"
-                            value={password}
-                        >
-                            <Label>Password</Label>
-                            <Input
-                                minLength={8}
-                                placeholder="At least 8 characters"
-                            />
-                        </TextField>
-                        {message && (
-                            <Alert status="danger">
-                                <Alert.Indicator />
-                                <Alert.Content>
-                                    <Alert.Title>
-                                        Unable to authenticate
-                                    </Alert.Title>
-                                    <Alert.Description>
-                                        {message}
-                                    </Alert.Description>
-                                </Alert.Content>
-                            </Alert>
-                        )}
-                    </Card.Content>
-                    <Card.Footer className="flex flex-col gap-3">
-                        <Button fullWidth type="submit">
-                            {isSignUp ? "Create account" : "Sign in"}
-                        </Button>
-                        <Button
-                            fullWidth
-                            onPress={() => {
-                                setIsSignUp((value) => !value);
-                                setMessage(undefined);
-                            }}
-                            variant="tertiary"
-                        >
-                            {isSignUp
-                                ? "Already have an account? Sign in"
-                                : "Need an account? Sign up"}
-                        </Button>
-                    </Card.Footer>
-                </Form>
+                <Card.Content>
+                    <ConnectionAlert
+                        isError={healthQuery.isError}
+                        isSuccess={healthQuery.isSuccess}
+                        title={apiStatus}
+                    />
+                </Card.Content>
+                {isSignUp ? (
+                    <SignUpForm message={message} onSubmit={signUp} />
+                ) : (
+                    <SignInForm message={message} onSubmit={signIn} />
+                )}
+                <Card.Footer>
+                    <Button
+                        fullWidth
+                        onPress={() => {
+                            setIsSignUp((value) => !value);
+                            setMessage(undefined);
+                        }}
+                        variant="tertiary"
+                    >
+                        {isSignUp
+                            ? "Already have an account? Sign in"
+                            : "Need an account? Sign up"}
+                    </Button>
+                </Card.Footer>
             </Card>
         </main>
+    );
+}
+
+function ConnectionAlert({
+    detail,
+    isError,
+    isSuccess,
+    title,
+}: {
+    detail?: string;
+    isError: boolean;
+    isSuccess: boolean;
+    title: string;
+}) {
+    return (
+        <Alert status={isSuccess ? "success" : isError ? "danger" : "accent"}>
+            <Alert.Indicator />
+            <Alert.Content>
+                <Alert.Title>{title}</Alert.Title>
+                {detail && <Alert.Description>{detail}</Alert.Description>}
+            </Alert.Content>
+        </Alert>
+    );
+}
+
+function SignInForm({
+    message,
+    onSubmit,
+}: {
+    message?: string;
+    onSubmit: (values: SignInFormValues) => Promise<void>;
+}) {
+    const {
+        control,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = useForm<SignInFormValues>({
+        defaultValues: { email: "", password: "" },
+        resolver: zodResolver(signInSchema),
+    });
+
+    return (
+        <Form className="contents" onSubmit={handleSubmit(onSubmit)}>
+            <Card.Content className="flex flex-col gap-4">
+                <EmailField control={control} />
+                <PasswordField control={control} />
+                {message && <AuthenticationError message={message} />}
+            </Card.Content>
+            <Card.Footer>
+                <Button fullWidth isPending={isSubmitting} type="submit">
+                    Sign in
+                </Button>
+            </Card.Footer>
+        </Form>
+    );
+}
+
+function SignUpForm({
+    message,
+    onSubmit,
+}: {
+    message?: string;
+    onSubmit: (values: SignUpFormValues) => Promise<void>;
+}) {
+    const {
+        control,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = useForm<SignUpFormValues>({
+        defaultValues: { email: "", name: "", password: "" },
+        resolver: zodResolver(signUpSchema),
+    });
+
+    return (
+        <Form className="contents" onSubmit={handleSubmit(onSubmit)}>
+            <Card.Content className="flex flex-col gap-4">
+                <Controller
+                    control={control}
+                    name="name"
+                    render={({ field, fieldState }) => (
+                        <TextField
+                            fullWidth
+                            isInvalid={Boolean(fieldState.error)}
+                            isRequired
+                            name={field.name}
+                            onChange={field.onChange}
+                            value={field.value}
+                        >
+                            <Label>Name</Label>
+                            <Input placeholder="Your name" />
+                            {fieldState.error && (
+                                <FieldError>
+                                    {fieldState.error.message}
+                                </FieldError>
+                            )}
+                        </TextField>
+                    )}
+                />
+                <EmailField control={control} />
+                <PasswordField control={control} />
+                {message && <AuthenticationError message={message} />}
+            </Card.Content>
+            <Card.Footer>
+                <Button fullWidth isPending={isSubmitting} type="submit">
+                    Create account
+                </Button>
+            </Card.Footer>
+        </Form>
+    );
+}
+
+function EmailField<T extends SignInFormValues>({
+    control,
+}: {
+    control: Control<T>;
+}) {
+    return (
+        <Controller
+            control={control}
+            name={"email" as Path<T>}
+            render={({ field, fieldState }) => (
+                <TextField
+                    fullWidth
+                    isInvalid={Boolean(fieldState.error)}
+                    isRequired
+                    name={field.name}
+                    onChange={field.onChange}
+                    type="email"
+                    value={field.value}
+                >
+                    <Label>Email</Label>
+                    <Input placeholder="you@example.com" />
+                    {fieldState.error && (
+                        <FieldError>{fieldState.error.message}</FieldError>
+                    )}
+                </TextField>
+            )}
+        />
+    );
+}
+
+function PasswordField<T extends SignInFormValues>({
+    control,
+}: {
+    control: Control<T>;
+}) {
+    return (
+        <Controller
+            control={control}
+            name={"password" as Path<T>}
+            render={({ field, fieldState }) => (
+                <TextField
+                    fullWidth
+                    isInvalid={Boolean(fieldState.error)}
+                    isRequired
+                    name={field.name}
+                    onChange={field.onChange}
+                    type="password"
+                    value={field.value}
+                >
+                    <Label>Password</Label>
+                    <Input minLength={8} placeholder="At least 8 characters" />
+                    {fieldState.error && (
+                        <FieldError>{fieldState.error.message}</FieldError>
+                    )}
+                </TextField>
+            )}
+        />
+    );
+}
+
+function AuthenticationError({ message }: { message: string }) {
+    return (
+        <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+                <Alert.Title>Unable to authenticate</Alert.Title>
+                <Alert.Description>{message}</Alert.Description>
+            </Alert.Content>
+        </Alert>
     );
 }

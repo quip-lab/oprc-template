@@ -21,6 +21,7 @@ packages/
   api/                 oRPC router, auth middleware, and Effect procedures
   auth/                Better Auth server configuration
   db/                  Drizzle client, schema, and migrations
+  validators/           Shared client-safe Zod validation schemas
   biome-config/        Shared Biome configuration
   typescript-config/   Shared TypeScript base configurations
 ```
@@ -155,5 +156,6 @@ prototyping. Prefer generated migrations for shared and production databases.
 - [API package](packages/api/README.md)
 - [Auth package](packages/auth/README.md)
 - [Database package](packages/db/README.md)
+- [Validation package](packages/validators/README.md)
 - [Biome configuration](packages/biome-config/README.md)
 - [TypeScript configuration](packages/typescript-config/README.md)

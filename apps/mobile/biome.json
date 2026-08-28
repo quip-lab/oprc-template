@@ -10,6 +10,6 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "includes": ["**", "!assets"]
+        "includes": ["**", "!assets", "!src/uniwind-types.d.ts"]
     }
 }
