@@ -24,6 +24,7 @@
         "@types/pg": "catalog:",
         "dotenv-cli": "catalog:",
         "drizzle-kit": "catalog:",
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "vitest": "catalog:"
     }
 }
