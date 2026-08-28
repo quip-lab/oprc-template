@@ -1,4 +1,4 @@
-name: husky
+name: CI
 
 on:
     pull_request:
@@ -13,8 +13,35 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    pre-commit:
-        name: pre-commit
+    husky:
+        name: Husky
+        runs-on: blacksmith-2vcpu-ubuntu-2404
+        timeout-minutes: 15
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v6
+              with:
+                  version: 11.23.0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: 24
+                  cache: pnpm
+                  cache-dependency-path: pnpm-lock.yaml
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run husky checks
+              run: CI=true ./.husky/pre-commit
+
+    tests:
+        name: Tests
         runs-on: blacksmith-2vcpu-ubuntu-2404
         timeout-minutes: 15
         env:
@@ -60,11 +87,37 @@ jobs:
             - name: Apply database migrations
               run: pnpm db:migrate
 
-            - name: Run husky checks
-              run: CI=true ./.husky/pre-commit
-
             - name: Run workspace tests
               run: pnpm test
+
+    build:
+        name: Build
+        runs-on: blacksmith-2vcpu-ubuntu-2404
+        timeout-minutes: 15
+        env:
+            DATABASE_URL: postgresql://postgres:postgres@localhost:5432/oprc
+            BETTER_AUTH_SECRET: test-secret-for-ci-only-must-be-at-least-32-characters
+            BETTER_AUTH_URL: http://localhost:3000
+            VITE_AUTH_URL: http://localhost:3000
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: Set up pnpm
+              uses: pnpm/action-setup@v6
+              with:
+                  version: 11.23.0
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: 24
+                  cache: pnpm
+                  cache-dependency-path: pnpm-lock.yaml
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
             - name: Build workspace
               run: pnpm build
@@ -72,10 +125,15 @@ jobs:
     all-green:
         name: all-green
         if: always()
-        needs: [pre-commit]
+        needs: [husky, tests, build]
         runs-on: blacksmith-2vcpu-ubuntu-2404
         steps:
             - name: Check for successful checks
               env:
-                  PRE_COMMIT_RESULT: ${{ needs.pre-commit.result }}
-              run: test "$PRE_COMMIT_RESULT" = "success"
+                  BUILD_RESULT: ${{ needs.build.result }}
+                  HUSKY_RESULT: ${{ needs.husky.result }}
+                  TEST_RESULT: ${{ needs.tests.result }}
+              run: |
+                  test "$HUSKY_RESULT" = "success"
+                  test "$TEST_RESULT" = "success"
+                  test "$BUILD_RESULT" = "success"
