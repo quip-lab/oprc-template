@@ -93,12 +93,17 @@ has its own `biome.json` so Expo assets stay outside code-quality checks.
 
 Before distributing a native build, set `EXPO_APP_IDENTIFIER` to a unique
 reverse-DNS identifier you own. It is shared by iOS and Android and defaults to
-`com.quip.oprctemplate` so `expo start --ios` works out of the box. Then run the
-EAS configure flow from this workspace to link the Expo project.
+`com.example.oprctemplate` so `expo start --ios` works out of the box. Then run
+the EAS initialization flow from this workspace to link the derived application
+to its own Expo project:
 
 ```sh
-pnpm --dir apps/mobile dlx eas-cli@22.6.0 build:configure
+pnpm --dir apps/mobile dlx eas-cli@22.6.0 init
 ```
+
+`eas init` adds `extra.eas.projectId` to `app.config.ts`. That ID is not a
+secret, and should be committed by the derived application, but it must not be
+committed to this reusable template.
 
 To use a development build on an iPhone, register the device and create the
 first internal iOS build. Install it from the EAS build link, then use the

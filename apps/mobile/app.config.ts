@@ -2,7 +2,7 @@ import type { ExpoConfig } from "expo/config";
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL?.replace(/\/+$/, "");
 const appIdentifier =
-    process.env.EXPO_APP_IDENTIFIER ?? "com.quip.oprctemplate";
+    process.env.EXPO_APP_IDENTIFIER ?? "com.example.oprctemplate";
 
 const appConfig: ExpoConfig = {
     name: "mobile",
