@@ -1,56 +1,66 @@
-# Welcome to your Expo app 👋
+# Mobile application
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The `mobile` workspace is an Expo Router client for the shared Better Auth and
+oRPC backend hosted by the web app. It supports iOS, Android, and Expo web.
 
-## Get started
+## Run locally
 
-1. Install dependencies
+From the repository root:
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```sh
+pnpm --filter mobile dev
+pnpm --filter mobile ios
+pnpm --filter mobile android
+pnpm --filter mobile web
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Start the web workspace separately before signing in or making RPC calls:
 
-### Other setup steps
+```sh
+pnpm --filter web dev
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+For Expo Go or a physical development build, the device and development
+machine must share a LAN. `src/lib/base-url.ts` gets Metro's LAN host at
+runtime and targets port `3000`; no `EXPO_PUBLIC_AUTH_URL` is needed.
 
-## Learn more
+The localhost fallback works for simulators. A standalone production build
+needs a deployed API origin configured in `getBaseUrl`.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Structure
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+| Location | Responsibility |
+| --- | --- |
+| `src/app/` | Expo Router routes and root layout. |
+| `src/app/_layout.tsx` | Theme, splash screen, and TanStack Query provider. |
+| `src/lib/auth-client.ts` | Better Auth Expo client backed by SecureStore. |
+| `src/lib/orpc.ts` | Typed RPC client that forwards the stored auth cookie. |
+| `src/lib/base-url.ts` | Development LAN address discovery. |
+| `src/lib/query-client.ts` | Browser/mobile singleton `QueryClient`. |
+| `src/components/` | Reusable UI components. |
 
-## Join the community
+## Authentication and data
 
-Join our community of developers creating universal apps.
+The Better Auth Expo plugin persists the session cookie using
+`expo-secure-store`. oRPC reads that cookie in `src/lib/orpc.ts` and sends it
+in the request headers, so server procedures protected by `authorized` receive
+the same session as the web app.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```tsx
+const { data: session } = authClient.useSession();
+const healthQuery = useQuery(orpc.health.queryOptions());
+```
+
+Add RPC procedures in `@repo/api`, not inside this workspace. The client types
+update from the shared router automatically.
+
+## Configuration
+
+`app.config.ts` defines the `mobile` URL scheme, icons, splash screen,
+`expo-router`, and `expo-secure-store`. The app has its own `biome.json` so
+Expo assets stay outside code-quality checks.
+
+```sh
+pnpm --filter mobile check-types
+pnpm --filter mobile lint
+```

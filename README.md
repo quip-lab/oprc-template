@@ -1,159 +1,158 @@
-# Turborepo starter
+<p align="center">
+  <img src="assets/quip.png" alt="Quip" width="160" />
+</p>
 
-This Turborepo starter is maintained by the Turborepo core team.
+# oRPC full-stack template
 
-## Using this example
+A pnpm + Turborepo workspace for a TanStack Start web app and an Expo mobile
+app. Both clients share a type-safe oRPC API, Better Auth session model, Drizzle
+schema, and PostgreSQL database.
 
-Run the following command:
+Built by Quip.
 
-```sh
-npx create-turbo@latest
+## Workspace layout
+
+```text
+apps/
+  web/                 TanStack Start web application and HTTP entry point
+  mobile/              Expo application
+packages/
+  api/                 oRPC router, auth middleware, and Effect procedures
+  auth/                Better Auth server configuration
+  db/                  Drizzle client, schema, and migrations
+  biome-config/        Shared Biome configuration
+  typescript-config/   Shared TypeScript base configurations
 ```
 
-## What's inside?
+See [apps/README.md](apps/README.md) and [packages/README.md](packages/README.md)
+for the boundaries and package-specific guides.
 
-This Turborepo includes the following packages/apps:
+## Prerequisites
 
-### Apps and Packages
+- Node.js 24 or newer
+- pnpm 11.23.0 (the pinned package manager)
+- A PostgreSQL-compatible database
 
-- `web`: a [TanStack Start](https://tanstack.com/start) app
-- `mobile`: an [Expo](https://expo.dev/) app
-- `@repo/biome-config`: shared Biome configuration used by the workspace root
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Quick start
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+1. Install dependencies.
 
-### Utilities
+   ```sh
+   pnpm install
+   ```
 
-This Turborepo has some additional tools already setup for you:
+2. Create a root `.env` from the example and set a real database URL and
+   Better Auth secret.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Biome](https://biomejs.dev/) for code linting and formatting
+   ```sh
+   cp .env.example .env
+   ```
 
-The pnpm catalog centrally defines the Biome and TypeScript versions used across the workspace.
+3. Apply the committed database migrations.
 
-### Build
+   ```sh
+   pnpm db:migrate
+   ```
 
-To build all apps and packages, run the following command:
+4. Start the web server and Expo app in separate terminals.
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+   ```sh
+   pnpm --filter web dev
+   pnpm --filter mobile dev
+   ```
 
-```sh
-cd my-turborepo
-turbo build
+   The web server listens on port `3000` and binds to the LAN. Expo Go or a
+   development build must be on the same network to reach it.
+
+## Environment variables
+
+All runtime configuration lives in the root `.env`; package scripts load it
+through `dotenv-cli` when run from their package directory.
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | Yes | PostgreSQL connection string used by Drizzle and Better Auth. |
+| `BETTER_AUTH_SECRET` | Yes in production | High-entropy secret used to sign auth data. |
+| `BETTER_AUTH_URL` | Yes in production | Public origin handled by Better Auth, such as `http://localhost:3000`. |
+| `VITE_AUTH_URL` | Web client | Browser-facing Better Auth origin; keep it aligned with `BETTER_AUTH_URL` locally. |
+
+The mobile app intentionally does not use an `EXPO_PUBLIC_AUTH_URL`. During
+development it derives the LAN host from Metro and connects to port `3000`.
+For a standalone production mobile build, replace that development fallback
+with the deployed API origin.
+
+## How requests flow
+
+```text
+Web browser / Expo app
+        │
+        ├── /api/auth  → Better Auth → Drizzle → PostgreSQL
+        │
+        └── /api/rpc   → oRPC handler → @repo/api → Effect procedures
+                                           │
+                                           └── authenticated context + Drizzle
 ```
 
-Without global `turbo`, use your package manager:
+The web server mounts both endpoints in `apps/web/src/server.ts`. Clients use
+`@orpc/tanstack-query` to expose typed TanStack Query options from the shared
+router. The Expo client sends Better Auth's stored cookie with each RPC call.
+
+## Commands
+
+Run these from the repository root.
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm dev` | Run all development tasks through Turbo with the root `.env`. |
+| `pnpm build` | Build all workspace packages and apps. |
+| `pnpm check` | Run Biome formatting, lint, and assist checks. |
+| `pnpm check:fix` | Apply Biome formatting and safe fixes. |
+| `pnpm check-types` | Typecheck all TypeScript projects. |
+| `pnpm format` | Format supported files with Biome. |
+| `pnpm lint` | Run package lint tasks through Turbo. |
+| `pnpm db:generate` | Generate Drizzle SQL migrations from the schema. |
+| `pnpm db:migrate` | Apply generated Drizzle migrations. |
+
+Use `pnpm --filter <package> <script>` to target one workspace, for example
+`pnpm --filter web dev` or `pnpm --filter @repo/auth auth:generate`.
+
+## Quality gates and automation
+
+Husky runs before each commit. It checks staged files with Biome and runs the
+workspace typecheck. When Biome can safely fix a staged file, the hook leaves
+the fix unstaged and blocks the commit so you can review and stage it.
+
+GitHub Actions runs the same Husky script in CI mode on a Blacksmith runner,
+then builds the workspace. The stable `required` job is intended for branch
+protection.
+
+Dependabot checks daily for npm/pnpm workspace updates—including pnpm
+catalogs—and GitHub Action updates. Enable Dependabot alerts and security
+updates in the GitHub repository settings to receive vulnerability PRs too.
+
+## Database workflow
+
+Application tables belong in `packages/db/src/schema`. Better Auth tables are
+generated into `packages/db/src/schema/auth.ts`; do not hand-edit that file.
 
 ```sh
-cd my-turborepo
-npx turbo build
-pnpm exec turbo build
-pnpm exec turbo build
+# Regenerate Better Auth's Drizzle schema after changing Better Auth options.
+pnpm --filter @repo/auth auth:generate
+
+# Generate SQL after schema changes, review it, then apply it.
+pnpm db:generate
+pnpm db:migrate
 ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+`pnpm --filter @repo/db db:push` is available for development-only schema
+prototyping. Prefer generated migrations for shared and production databases.
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+## Documentation
 
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+- [Web app](apps/web/README.md)
+- [Mobile app](apps/mobile/README.md)
+- [API package](packages/api/README.md)
+- [Auth package](packages/auth/README.md)
+- [Database package](packages/db/README.md)
+- [Biome configuration](packages/biome-config/README.md)
+- [TypeScript configuration](packages/typescript-config/README.md)
