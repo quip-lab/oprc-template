@@ -7,7 +7,8 @@ import type { router } from "@repo/api";
 import { authClient, authUrl } from "./auth-client";
 
 const link = new RPCLink({
-    url: new URL("/api/rpc", authUrl),
+    origin: authUrl,
+    url: "/api/rpc",
     headers: async () => ({
         cookie: await authClient.getCookie(),
     }),

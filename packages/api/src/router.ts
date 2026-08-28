@@ -1,10 +1,13 @@
+import { Effect } from "effect";
 import { z } from "zod";
 
 import { authorized, base } from "./auth.js";
 
 export const health = base
     .output(z.object({ status: z.literal("ok") }))
-    .handler(() => ({ status: "ok" }));
+    .effect(function* () {
+        return yield* Effect.succeed({ status: "ok" as const });
+    });
 
 export const me = authorized
     .output(
@@ -16,7 +19,9 @@ export const me = authorized
             image: z.string().nullable().optional(),
         }),
     )
-    .handler(({ context }) => context.user);
+    .effect(function* ({ context }) {
+        return yield* Effect.succeed(context.user);
+    });
 
 export const router = {
     health,
