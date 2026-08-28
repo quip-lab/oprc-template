@@ -1,12 +1,16 @@
 {
     "$schema": "https://turborepo.dev/schema.json",
     "ui": "tui",
-    "globalDependencies": ["biome.json", "packages/biome-config/biome.json"],
+    "globalDependencies": [
+        "biome.json",
+        "apps/*/biome.json",
+        "packages/biome-config/biome.json"
+    ],
     "tasks": {
         "build": {
             "dependsOn": ["^build"],
             "inputs": ["$TURBO_DEFAULT$", ".env*"],
-            "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"]
+            "outputs": [".output/**", "dist/**"]
         },
         "lint": {
             "dependsOn": ["^lint"]
