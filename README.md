@@ -130,10 +130,10 @@ the fix unstaged and blocks the commit so you can review and stage it.
 
 GitHub Actions provisions a disposable PostgreSQL database, applies the
 migrations, and runs the same Husky script in CI mode on a Blacksmith runner,
-then builds the workspace. The stable `required` job is intended for branch
-protection. CodeQL analyzes JavaScript and TypeScript on pull requests and on a
-weekly schedule; enable code scanning in the repository security settings if it
-is not already active.
+then runs the workspace tests and builds the workspace. The stable `required`
+job is intended for branch protection. CodeQL analyzes JavaScript and TypeScript
+on pull requests and on a weekly schedule; enable code scanning in the
+repository security settings if it is not already active.
 
 Dependabot checks daily for npm/pnpm workspace updates—including pnpm
 catalogs—and GitHub Action updates. Enable Dependabot alerts and security

@@ -44,8 +44,4 @@ if ! run_task "workspace typecheck" pnpm check-types; then
     status=1
 fi
 
-if ! run_task "workspace test" pnpm test; then
-    status=1
-fi
-
 exit "$status"
