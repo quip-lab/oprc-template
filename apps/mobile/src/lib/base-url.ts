@@ -1,10 +1,16 @@
 import Constants from "expo-constants";
 
 /**
- * Uses Metro's LAN host during development so Expo Go and development builds
- * can reach the TanStack Start server running on port 3000.
+ * Uses the configured production origin when present. Otherwise, Metro's LAN
+ * host lets Expo Go and development builds reach the local web server.
  */
 export function getBaseUrl() {
+    const apiUrl = Constants.expoConfig?.extra?.apiUrl;
+
+    if (typeof apiUrl === "string" && apiUrl.length > 0) {
+        return apiUrl;
+    }
+
     const debuggerHost = Constants.expoConfig?.hostUri;
     const host = debuggerHost?.split(":")[0];
 

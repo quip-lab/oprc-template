@@ -1,5 +1,7 @@
 import type { ExpoConfig } from "expo/config";
 
+const apiUrl = process.env.EXPO_PUBLIC_API_URL?.replace(/\/+$/, "");
+
 const appConfig: ExpoConfig = {
     name: "mobile",
     slug: "mobile",
@@ -39,6 +41,9 @@ const appConfig: ExpoConfig = {
     experiments: {
         typedRoutes: true,
         reactCompiler: true,
+    },
+    extra: {
+        apiUrl,
     },
 };
 
