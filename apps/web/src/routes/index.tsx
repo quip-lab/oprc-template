@@ -1,3 +1,13 @@
+import {
+    Alert,
+    Button,
+    Card,
+    Form,
+    Input,
+    Label,
+    Spinner,
+    TextField,
+} from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { type FormEvent, useState } from "react";
@@ -39,83 +49,159 @@ function Home() {
     }
 
     if (isPending) {
-        return <main className="p-8">Loading session…</main>;
+        return (
+            <main className="grid min-h-screen place-items-center bg-background p-8">
+                <Card className="flex items-center gap-3 p-6">
+                    <Spinner />
+                    <Card.Description>Loading session…</Card.Description>
+                </Card>
+            </main>
+        );
     }
 
     if (session) {
         return (
-            <main className="mx-auto max-w-lg p-8">
-                <h1 className="text-4xl font-bold">
-                    Welcome, {session.user.name}
-                </h1>
-                <p className="mt-4 text-lg">{session.user.email}</p>
-                <p className="mt-2 text-sm text-gray-600">{apiStatus}</p>
-                <p className="mt-1 text-sm text-gray-600">
-                    {meQuery.data
-                        ? `oRPC session: ${meQuery.data.email}`
-                        : "Checking oRPC session…"}
-                </p>
-                <button
-                    className="mt-6 rounded bg-black px-4 py-2 text-white"
-                    onClick={() => authClient.signOut()}
-                    type="button"
-                >
-                    Sign out
-                </button>
+            <main className="grid min-h-screen place-items-center bg-background p-6">
+                <Card className="w-full max-w-md gap-6">
+                    <Card.Header>
+                        <Card.Title>Welcome, {session.user.name}</Card.Title>
+                        <Card.Description>
+                            {session.user.email}
+                        </Card.Description>
+                    </Card.Header>
+                    <Card.Content>
+                        <Alert
+                            status={
+                                healthQuery.isSuccess
+                                    ? "success"
+                                    : healthQuery.isError
+                                      ? "danger"
+                                      : "accent"
+                            }
+                        >
+                            <Alert.Indicator />
+                            <Alert.Content>
+                                <Alert.Title>{apiStatus}</Alert.Title>
+                                <Alert.Description>
+                                    {meQuery.data
+                                        ? `oRPC session: ${meQuery.data.email}`
+                                        : "Checking your oRPC session…"}
+                                </Alert.Description>
+                            </Alert.Content>
+                        </Alert>
+                    </Card.Content>
+                    <Card.Footer>
+                        <Button
+                            onPress={() => {
+                                void authClient.signOut();
+                            }}
+                            variant="secondary"
+                        >
+                            Sign out
+                        </Button>
+                    </Card.Footer>
+                </Card>
             </main>
         );
     }
 
     return (
-        <main className="mx-auto max-w-lg p-8">
-            <h1 className="text-4xl font-bold">
-                {isSignUp ? "Create an account" : "Sign in"}
-            </h1>
-            <p className="mt-2 text-sm text-gray-600">{apiStatus}</p>
-            <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-                {isSignUp && (
-                    <input
-                        className="w-full rounded border p-3"
-                        onChange={(event) => setName(event.target.value)}
-                        placeholder="Name"
-                        required
-                        value={name}
-                    />
-                )}
-                <input
-                    className="w-full rounded border p-3"
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="Email"
-                    required
-                    type="email"
-                    value={email}
-                />
-                <input
-                    className="w-full rounded border p-3"
-                    minLength={8}
-                    onChange={(event) => setPassword(event.target.value)}
-                    placeholder="Password"
-                    required
-                    type="password"
-                    value={password}
-                />
-                {message && <p className="text-red-600">{message}</p>}
-                <button
-                    className="w-full rounded bg-black px-4 py-3 text-white"
-                    type="submit"
-                >
-                    {isSignUp ? "Create account" : "Sign in"}
-                </button>
-            </form>
-            <button
-                className="mt-4 underline"
-                onClick={() => setIsSignUp((value) => !value)}
-                type="button"
-            >
-                {isSignUp
-                    ? "Already have an account? Sign in"
-                    : "Need an account? Sign up"}
-            </button>
+        <main className="grid min-h-screen place-items-center bg-background p-6">
+            <Card className="w-full max-w-md gap-6">
+                <Card.Header>
+                    <Card.Title>
+                        {isSignUp ? "Create an account" : "Sign in"}
+                    </Card.Title>
+                    <Card.Description>
+                        Use your email and password to continue.
+                    </Card.Description>
+                </Card.Header>
+                <Form className="contents" onSubmit={handleSubmit}>
+                    <Card.Content className="flex flex-col gap-4">
+                        <Alert
+                            status={
+                                healthQuery.isSuccess
+                                    ? "success"
+                                    : healthQuery.isError
+                                      ? "danger"
+                                      : "accent"
+                            }
+                        >
+                            <Alert.Indicator />
+                            <Alert.Content>
+                                <Alert.Title>{apiStatus}</Alert.Title>
+                            </Alert.Content>
+                        </Alert>
+                        {isSignUp && (
+                            <TextField
+                                fullWidth
+                                isRequired
+                                name="name"
+                                onChange={setName}
+                                value={name}
+                            >
+                                <Label>Name</Label>
+                                <Input placeholder="Your name" />
+                            </TextField>
+                        )}
+                        <TextField
+                            fullWidth
+                            isRequired
+                            name="email"
+                            onChange={setEmail}
+                            type="email"
+                            value={email}
+                        >
+                            <Label>Email</Label>
+                            <Input placeholder="you@example.com" />
+                        </TextField>
+                        <TextField
+                            fullWidth
+                            isRequired
+                            name="password"
+                            onChange={setPassword}
+                            type="password"
+                            value={password}
+                        >
+                            <Label>Password</Label>
+                            <Input
+                                minLength={8}
+                                placeholder="At least 8 characters"
+                            />
+                        </TextField>
+                        {message && (
+                            <Alert status="danger">
+                                <Alert.Indicator />
+                                <Alert.Content>
+                                    <Alert.Title>
+                                        Unable to authenticate
+                                    </Alert.Title>
+                                    <Alert.Description>
+                                        {message}
+                                    </Alert.Description>
+                                </Alert.Content>
+                            </Alert>
+                        )}
+                    </Card.Content>
+                    <Card.Footer className="flex flex-col gap-3">
+                        <Button fullWidth type="submit">
+                            {isSignUp ? "Create account" : "Sign in"}
+                        </Button>
+                        <Button
+                            fullWidth
+                            onPress={() => {
+                                setIsSignUp((value) => !value);
+                                setMessage(undefined);
+                            }}
+                            variant="tertiary"
+                        >
+                            {isSignUp
+                                ? "Already have an account? Sign in"
+                                : "Need an account? Sign up"}
+                        </Button>
+                    </Card.Footer>
+                </Form>
+            </Card>
         </main>
     );
 }

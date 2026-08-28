@@ -32,12 +32,25 @@ needs a deployed API origin configured in `getBaseUrl`.
 | Location | Responsibility |
 | --- | --- |
 | `src/app/` | Expo Router routes and root layout. |
-| `src/app/_layout.tsx` | Theme, splash screen, and TanStack Query provider. |
+| `src/app/_layout.tsx` | Gesture root, HeroUI Native, theme, splash screen, and TanStack Query providers. |
 | `src/lib/auth-client.ts` | Better Auth Expo client backed by SecureStore. |
 | `src/lib/orpc.ts` | Typed RPC client that forwards the stored auth cookie. |
 | `src/lib/base-url.ts` | Development LAN address discovery. |
 | `src/lib/query-client.ts` | Browser/mobile singleton `QueryClient`. |
 | `src/components/` | Reusable UI components. |
+
+## UI
+
+Mobile screens use HeroUI Native components from `heroui-native`. The required
+`GestureHandlerRootView` and `HeroUINativeProvider` are installed in
+`src/app/_layout.tsx`. Styling is powered by Uniwind and Tailwind CSS 4:
+
+- `src/global.css` imports Tailwind, Uniwind, and HeroUI Native styles.
+- `metro.config.js` wraps Expo's Metro configuration with Uniwind and generates
+  `src/uniwind-types.d.ts`.
+
+After changing Tailwind configuration, restart Expo/Metro so Uniwind can
+regenerate its type definitions.
 
 ## Authentication and data
 
