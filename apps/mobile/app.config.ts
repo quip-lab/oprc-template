@@ -40,9 +40,6 @@ const appConfig: ExpoConfig = {
         typedRoutes: true,
         reactCompiler: true,
     },
-    extra: {
-        authUrl: process.env.EXPO_PUBLIC_AUTH_URL,
-    },
 };
 
 export default appConfig;

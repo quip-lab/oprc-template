@@ -8,6 +8,11 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "includes": ["**", "!**/public", "!**/routeTree.gen.ts"]
+        "includes": [
+            "**",
+            "!**/public",
+            "!**/routeTree.gen.ts",
+            "!**/drizzle/meta"
+        ]
     }
 }

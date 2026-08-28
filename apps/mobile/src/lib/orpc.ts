@@ -4,10 +4,11 @@ import type { RouterClient } from "@orpc/server";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import type { router } from "@repo/api";
 
-import { authClient, authUrl } from "./auth-client";
+import { authClient } from "./auth-client";
+import { getBaseUrl } from "./base-url";
 
 const link = new RPCLink({
-    origin: authUrl,
+    origin: getBaseUrl(),
     url: "/api/rpc",
     headers: async () => ({
         cookie: await authClient.getCookie(),

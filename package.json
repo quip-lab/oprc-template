@@ -5,9 +5,14 @@
         "build": "turbo run build",
         "dev": "pnpm run with-env turbo run dev",
         "with-env": "dotenv -e .env --",
+        "prepare": "husky",
+        "db:generate": "pnpm --filter @repo/db db:generate",
+        "db:migrate": "pnpm --filter @repo/db db:migrate",
         "lint": "turbo run lint",
         "format": "biome format --write .",
+
         "format:check": "biome format .",
+        "check:fix": "biome check --write .",
         "check": "biome check .",
         "check-types": "turbo run check-types"
     },
@@ -15,6 +20,7 @@
         "@biomejs/biome": "catalog:",
         "@repo/biome-config": "workspace:*",
         "dotenv-cli": "catalog:",
+        "husky": "^9.1.7",
         "turbo": "^2.10.12",
         "typescript": "catalog:"
     },
