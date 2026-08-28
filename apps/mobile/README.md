@@ -14,6 +14,13 @@ pnpm --filter mobile android
 pnpm --filter mobile web
 ```
 
+These commands explicitly launch Expo Go. To use the EAS `development` profile,
+first install its development build on the simulator/device, then run:
+
+```sh
+pnpm --filter mobile dev:client
+```
+
 Start the web workspace separately before signing in or making RPC calls:
 
 ```sh
