@@ -63,6 +63,9 @@ jobs:
             - name: Run husky checks
               run: CI=true ./.husky/pre-commit
 
+            - name: Run workspace tests
+              run: pnpm test
+
             - name: Build workspace
               run: pnpm build
 
