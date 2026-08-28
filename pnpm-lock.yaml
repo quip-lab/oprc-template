@@ -49,8 +49,8 @@ catalogs:
       specifier: ^0.45.2
       version: 0.45.2
     effect:
-      specifier: 4.0.0-beta.107
-      version: 4.0.0-beta.107
+      specifier: 4.0.0-rc.112
+      version: 4.0.0-rc.112
     pg:
       specifier: ^8.23.0
       version: 8.23.0
@@ -286,7 +286,7 @@ importers:
     dependencies:
       '@orpc/experimental-effect':
         specifier: 'catalog:'
-        version: 2.0.0-beta.31(effect@4.0.0-beta.107)
+        version: 2.0.0-beta.31(effect@4.0.0-rc.112)
       '@orpc/server':
         specifier: 'catalog:'
         version: 2.0.0-beta.31
@@ -298,7 +298,7 @@ importers:
         version: link:../db
       effect:
         specifier: 'catalog:'
-        version: 4.0.0-beta.107
+        version: 4.0.0-rc.112
       zod:
         specifier: 'catalog:'
         version: 4.4.3
@@ -3598,8 +3598,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  effect@4.0.0-beta.107:
-    resolution: {integrity: sha512-OoBAv8eF+yanc+C6xhgEUnWeXUSHA6ynnscYqpkAY9GSnzZWystsIjBowVqCkLpHGlnRtdIqYT3wHwpOY6JDnQ==}
+  effect@4.0.0-rc.112:
+    resolution: {integrity: sha512-wXxwuh1Ywnv4cPRM3Wfa0vDwuOHnZ1TsTgHJkG9XgzND6inhBH9n1vBxhg3iIXOia/OrpmvVmd3lrD4vq6bF3A==}
 
   electron-to-chromium@1.5.414:
     resolution: {integrity: sha512-aYlviXiaXBbzvKgyALpcMmqa3Np3sDr0XnZbEG62n2UpZFbEcjQ4EEMOLGzVPhwVnwTz0lvKY+GcARbunuHekw==}
@@ -4147,9 +4147,6 @@ packages:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
 
-  kubernetes-types@1.30.0:
-    resolution: {integrity: sha512-Dew1okvhM/SQcIa2rcgujNndZwU8VnSapDgdxlYoB84ZlpAD43U6KLAFqYo17ykSFGHNPrg0qry0bP+GJd9v7Q==}
-
   kysely@0.29.5:
     resolution: {integrity: sha512-ooa+eSbBNPTo3MycPEuW5jdrxQdQwdtB3LC3h43FiXQbIry5tR0C5lDG7eealK0E4D7XjrnOP5DIUg/LyjRMYQ==}
     engines: {node: '>=22.0.0'}
@@ -4475,8 +4472,8 @@ packages:
     resolution: {integrity: sha512-4kmO/MdyUIkLIvTPr8VHLil4AtoKIoniWPIEk5+CDy0xnWC84azhSFmuJ7PxZdsYtiP5kEeQsORAVIeMgxT+Hw==}
     hasBin: true
 
-  msgpackr@2.0.6:
-    resolution: {integrity: sha512-plGul/tqjt9vqWFR9zyqyLZls6gb5KTLvnsRO2B9+TZ8tNiXiVI/CR8LiDWlAX4IUeVkQ9gsmzKA6voC2QOciw==}
+  msgpackr@2.0.5:
+    resolution: {integrity: sha512-cef05H/dSYpLpqp3sj/qyZh5vhUYCalnaLO7j1yOmpsR0y/XwLVtK7r5gn+U/F7CTEfMowcGhlUQJDLcLf7jcA==}
 
   multitars@1.0.2:
     resolution: {integrity: sha512-6GwVw5eLi9sThdtlS4PKwC7yRLaf45pYhIEzKBHdKxi+YOXGKFX8acIniH+Uh/+k9mS2lQOupTccjoe5r0/1IQ==}
@@ -5329,10 +5326,6 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
-
-  uuid@14.0.2:
-    resolution: {integrity: sha512-xZe/16rV4aa+HGSOCiY2YeLT1OybRLrrkL/Rqaq7p7GMVXjFh+6wN4oMYgjFmnSnhY8t6Xpdl2l9qmnHYuMHwQ==}
-    hasBin: true
 
   uuid@7.0.3:
     resolution: {integrity: sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==}
@@ -7244,13 +7237,13 @@ snapshots:
     transitivePeerDependencies:
       - '@opentelemetry/api'
 
-  '@orpc/experimental-effect@2.0.0-beta.31(effect@4.0.0-beta.107)':
+  '@orpc/experimental-effect@2.0.0-beta.31(effect@4.0.0-rc.112)':
     dependencies:
       '@orpc/contract': 2.0.0-beta.31
       '@orpc/json-schema': 2.0.0-beta.31
       '@orpc/server': 2.0.0-beta.31
       '@orpc/shared': 2.0.0-beta.31
-      effect: 4.0.0-beta.107
+      effect: 4.0.0-rc.112
     transitivePeerDependencies:
       - '@opentelemetry/api'
       - crossws
@@ -9601,13 +9594,10 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  effect@4.0.0-beta.107:
+  effect@4.0.0-rc.112:
     dependencies:
-      '@standard-schema/spec': 1.1.0
       fast-check: 4.9.0
-      kubernetes-types: 1.30.0
-      msgpackr: 2.0.6
-      uuid: 14.0.2
+      msgpackr: 2.0.5
 
   electron-to-chromium@1.5.414: {}
 
@@ -10413,8 +10403,6 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  kubernetes-types@1.30.0: {}
-
   kysely@0.29.5: {}
 
   lan-network@0.2.1: {}
@@ -10789,7 +10777,7 @@ snapshots:
       '@msgpackr-extract/msgpackr-extract-win32-x64': 3.0.4
     optional: true
 
-  msgpackr@2.0.6:
+  msgpackr@2.0.5:
     optionalDependencies:
       msgpackr-extract: 3.0.4
 
@@ -11832,8 +11820,6 @@ snapshots:
       react: 19.2.8
 
   utils-merge@1.0.1: {}
-
-  uuid@14.0.2: {}
 
   uuid@7.0.3: {}
 
