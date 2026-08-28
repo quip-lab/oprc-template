@@ -15,6 +15,7 @@
     "dependencies": {
         "@better-auth/expo": "catalog:",
         "@repo/db": "workspace:*",
+        "@repo/env": "workspace:*",
         "better-auth": "catalog:"
     },
     "devDependencies": {

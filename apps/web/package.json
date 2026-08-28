@@ -29,6 +29,7 @@
         "@tanstack/react-query": "catalog:",
         "@repo/api": "workspace:*",
         "@repo/auth": "workspace:*",
+        "@repo/env": "workspace:*",
         "@repo/validators": "workspace:*",
         "better-auth": "catalog:",
         "react": "^19.2.8",

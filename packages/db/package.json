@@ -16,6 +16,7 @@
         "lint": "biome lint ."
     },
     "dependencies": {
+        "@repo/env": "workspace:*",
         "drizzle-orm": "catalog:",
         "pg": "catalog:"
     },

@@ -1,0 +1,23 @@
+{
+    "name": "@repo/env",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts",
+        "./client": "./src/client.ts"
+    },
+    "scripts": {
+        "check-types": "tsc --noEmit",
+        "lint": "biome lint ."
+    },
+    "dependencies": {
+        "zod": "catalog:"
+    },
+    "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:"
+    }
+}
