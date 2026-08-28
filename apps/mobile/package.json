@@ -54,14 +54,14 @@
     },
     "scripts": {
         "with-env": "dotenv -e ../../.env --",
-        "dev": "pnpm run with-env expo start",
-        "start": "pnpm run with-env expo start",
+        "dev": "pnpm run with-env expo start --dev-client",
+        "start": "pnpm run with-env expo start --dev-client",
         "eas:build:development": "pnpm dlx eas-cli@22.6.0 build --profile development",
         "eas:build:preview": "pnpm dlx eas-cli@22.6.0 build --profile preview",
         "eas:build:production": "pnpm dlx eas-cli@22.6.0 build --profile production",
         "eas:submit": "pnpm dlx eas-cli@22.6.0 submit --profile production",
-        "android": "pnpm run with-env expo start --android",
-        "ios": "pnpm run with-env expo start --ios",
+        "android": "pnpm run with-env expo start --dev-client --android",
+        "ios": "pnpm run with-env expo start --dev-client --ios",
         "web": "pnpm run with-env expo start --web",
         "lint": "biome lint .",
         "check-types": "tsc --noEmit"
