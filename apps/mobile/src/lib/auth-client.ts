@@ -3,10 +3,15 @@ import { createAuthClient } from "better-auth/react";
 import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
 
-const authUrl = Constants.expoConfig?.extra?.authUrl;
+const configuredAuthUrl = Constants.expoConfig?.extra?.authUrl;
+
+export const authUrl =
+    typeof configuredAuthUrl === "string"
+        ? configuredAuthUrl
+        : "http://localhost:3000";
 
 export const authClient = createAuthClient({
-    baseURL: typeof authUrl === "string" ? authUrl : "http://localhost:3000",
+    baseURL: authUrl,
     plugins: [
         expoClient({
             scheme: "mobile",

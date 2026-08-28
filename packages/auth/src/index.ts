@@ -1,1 +1,1 @@
-export { auth } from "./auth.js";
+export { auth, db } from "./auth.js";
