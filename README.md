@@ -17,6 +17,7 @@ This Turborepo includes the following packages/apps:
 ### Apps and Packages
 
 - `web`: a [TanStack Start](https://tanstack.com/start) app
+- `mobile`: an [Expo](https://expo.dev/) app
 - `@repo/biome-config`: shared Biome configuration used by the workspace root
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
