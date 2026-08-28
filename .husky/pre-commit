@@ -1,2 +1,47 @@
-pnpm exec lint-staged
-pnpm check-types
+run_task() {
+    task_name="$1"
+    shift
+    task_log="$(mktemp)"
+
+    if "$@" > "$task_log" 2>&1; then
+        printf "%-72sPassed\n" "$task_name"
+        rm -f "$task_log"
+        return 0
+    fi
+
+    printf "%-72sFailed\n" "$task_name"
+    cat "$task_log"
+    rm -f "$task_log"
+    return 1
+}
+
+status=0
+
+if [ "${CI:-}" = "true" ]; then
+    if ! run_task "biome check" pnpm check; then
+        status=1
+    fi
+else
+    diff_file="$(mktemp)"
+    trap 'rm -f "$diff_file"' EXIT
+
+    git diff --binary > "$diff_file"
+
+    if ! run_task "biome check" pnpm exec biome check --staged --no-errors-on-unmatched; then
+        status=1
+
+        if ! run_task "biome fix" pnpm exec biome check --staged --write --no-errors-on-unmatched; then
+            status=1
+        fi
+
+        if ! git diff --binary | cmp -s "$diff_file" -; then
+            echo "Biome applied fixes. Review and stage the fixes before committing."
+        fi
+    fi
+fi
+
+if ! run_task "workspace typecheck" pnpm check-types; then
+    status=1
+fi
+
+exit "$status"
