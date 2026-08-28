@@ -110,6 +110,8 @@ Run these from the repository root.
 | `pnpm check` | Run Biome formatting, lint, and assist checks. |
 | `pnpm check:fix` | Apply Biome formatting and safe fixes. |
 | `pnpm check-types` | Typecheck all TypeScript projects. |
+| `pnpm test` | Run unit tests and database integration tests when `DATABASE_URL` is set. |
+| `pnpm test:watch` | Run tests in watch mode. |
 | `pnpm format` | Format supported files with Biome. |
 | `pnpm lint` | Run package lint tasks through Turbo. |
 | `pnpm db:generate` | Generate Drizzle SQL migrations from the schema. |
