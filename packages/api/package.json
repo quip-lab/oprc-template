@@ -11,9 +11,11 @@
         "lint": "biome lint ."
     },
     "dependencies": {
+        "@orpc/experimental-effect": "catalog:",
         "@orpc/server": "catalog:",
         "@repo/auth": "workspace:*",
         "@repo/db": "workspace:*",
+        "effect": "catalog:",
         "zod": "catalog:"
     },
     "devDependencies": {

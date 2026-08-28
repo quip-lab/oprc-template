@@ -6,8 +6,8 @@ import type { router } from "@repo/api";
 
 const link = new RPCLink({
     url: "/api/rpc",
-    fetch: (request, init) =>
-        globalThis.fetch(request, {
+    fetch: (url, init) =>
+        globalThis.fetch(url, {
             ...init,
             credentials: "include",
         }),

@@ -1,5 +1,5 @@
 import { RPCHandler } from "@orpc/server/fetch";
-import { router } from "@repo/api";
+import { createAPIContext, router } from "@repo/api";
 import { auth, db } from "@repo/auth";
 import handler, { createServerEntry } from "@tanstack/react-start/server-entry";
 
@@ -16,10 +16,7 @@ export default createServerEntry({
         if (pathname === "/api/rpc" || pathname.startsWith("/api/rpc/")) {
             const { response } = await rpcHandler.handle(request, {
                 prefix: "/api/rpc",
-                context: {
-                    db,
-                    headers: request.headers,
-                },
+                context: createAPIContext(db, request.headers),
             });
 
             return response ?? new Response("Not found", { status: 404 });

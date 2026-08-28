@@ -1,3 +1,4 @@
+import "@orpc/experimental-effect/extensions/effect";
 import { ORPCError, os } from "@orpc/server";
 import { auth } from "@repo/auth";
 
