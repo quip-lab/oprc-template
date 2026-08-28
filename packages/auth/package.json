@@ -1,29 +1,27 @@
 {
-    "name": "@repo/db",
+    "name": "@repo/auth",
     "version": "0.0.0",
     "private": true,
     "type": "module",
     "exports": {
-        ".": "./src/index.ts",
-        "./schema": "./src/schema/index.ts"
+        ".": "./src/index.ts"
     },
     "scripts": {
         "with-env": "dotenv -e ../../.env --",
-        "db:generate": "pnpm run with-env drizzle-kit generate",
-        "db:migrate": "pnpm run with-env drizzle-kit migrate",
-        "db:push": "pnpm run with-env drizzle-kit push",
+        "auth:generate": "pnpm run with-env auth generate --adapter drizzle --dialect postgresql --output ../db/src/schema/auth.ts --yes",
         "check-types": "tsc --noEmit",
         "lint": "biome lint ."
     },
     "dependencies": {
-        "drizzle-orm": "catalog:",
-        "pg": "catalog:"
+        "@better-auth/expo": "catalog:",
+        "@repo/db": "workspace:*",
+        "better-auth": "catalog:"
     },
     "devDependencies": {
         "@repo/typescript-config": "workspace:*",
-        "@types/pg": "catalog:",
+        "@types/node": "catalog:",
+        "auth": "catalog:",
         "dotenv-cli": "catalog:",
-        "drizzle-kit": "catalog:",
         "typescript": "catalog:"
     }
 }
