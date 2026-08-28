@@ -3,4 +3,4 @@ export {
     type SignUpFormValues,
     signInSchema,
     signUpSchema,
-} from "./auth.js";
+} from "./auth";
