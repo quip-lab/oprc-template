@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
+import { RouteError, RouteNotFound } from "#/components/route-fallback";
 import { getQueryClient } from "#/lib/query-client";
 import appCss from "../styles.css?url";
 
@@ -27,6 +28,8 @@ export const Route = createRootRoute({
             },
         ],
     }),
+    errorComponent: RouteError,
+    notFoundComponent: RouteNotFound,
     shellComponent: RootDocument,
 });
 

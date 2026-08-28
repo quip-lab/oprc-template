@@ -20,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { type Control, Controller, type Path, useForm } from "react-hook-form";
-
+import { getApiErrorMessage } from "#/lib/api-error";
 import { authClient } from "#/lib/auth-client";
 import { orpc } from "#/lib/orpc";
 
@@ -93,13 +93,23 @@ export function Home() {
                     <Card.Content>
                         <ConnectionAlert
                             detail={
-                                meQuery.data
-                                    ? `oRPC session: ${meQuery.data.email}`
-                                    : "Checking your oRPC session…"
+                                meQuery.isError
+                                    ? getApiErrorMessage(meQuery.error)
+                                    : meQuery.data
+                                      ? `oRPC session: ${meQuery.data.email}`
+                                      : "Checking your oRPC session…"
                             }
-                            isError={healthQuery.isError}
+                            isError={healthQuery.isError || meQuery.isError}
                             isSuccess={healthQuery.isSuccess}
-                            title={apiStatus}
+                            onRetry={() => {
+                                void healthQuery.refetch();
+                                void meQuery.refetch();
+                            }}
+                            title={
+                                meQuery.isError
+                                    ? "Unable to load your session"
+                                    : apiStatus
+                            }
                         />
                     </Card.Content>
                     <Card.Footer>
@@ -130,8 +140,16 @@ export function Home() {
                 </Card.Header>
                 <Card.Content>
                     <ConnectionAlert
+                        detail={
+                            healthQuery.isError
+                                ? getApiErrorMessage(healthQuery.error)
+                                : undefined
+                        }
                         isError={healthQuery.isError}
                         isSuccess={healthQuery.isSuccess}
+                        onRetry={() => {
+                            void healthQuery.refetch();
+                        }}
                         title={apiStatus}
                     />
                 </Card.Content>
@@ -163,11 +181,13 @@ function ConnectionAlert({
     detail,
     isError,
     isSuccess,
+    onRetry,
     title,
 }: {
     detail?: string;
     isError: boolean;
     isSuccess: boolean;
+    onRetry: () => void;
     title: string;
 }) {
     return (
@@ -177,6 +197,11 @@ function ConnectionAlert({
                 <Alert.Title>{title}</Alert.Title>
                 {detail && <Alert.Description>{detail}</Alert.Description>}
             </Alert.Content>
+            {isError && (
+                <Button onPress={onRetry} size="sm" variant="danger">
+                    Retry
+                </Button>
+            )}
         </Alert>
     );
 }
