@@ -21,6 +21,7 @@ packages/
   api/                 oRPC router, auth middleware, and Effect procedures
   auth/                Better Auth server configuration
   db/                  Drizzle client, schema, and migrations
+  env/                 Runtime environment validation
   validators/           Shared client-safe Zod validation schemas
   biome-config/        Shared Biome configuration
   typescript-config/   Shared TypeScript base configurations
@@ -74,8 +75,8 @@ through `dotenv-cli` when run from their package directory.
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `DATABASE_URL` | Yes | PostgreSQL connection string used by Drizzle and Better Auth. |
-| `BETTER_AUTH_SECRET` | Yes in production | High-entropy secret used to sign auth data. |
-| `BETTER_AUTH_URL` | Yes in production | Public origin handled by Better Auth, such as `http://localhost:3000`. |
+| `BETTER_AUTH_SECRET` | Yes | High-entropy secret used to sign auth data; the placeholder is rejected in production. |
+| `BETTER_AUTH_URL` | Yes | Public origin handled by Better Auth, such as `http://localhost:3000`. |
 | `VITE_AUTH_URL` | Web client | Browser-facing Better Auth origin; keep it aligned with `BETTER_AUTH_URL` locally. |
 
 The mobile app intentionally does not use an `EXPO_PUBLIC_AUTH_URL`. During
@@ -158,6 +159,7 @@ prototyping. Prefer generated migrations for shared and production databases.
 - [API package](packages/api/README.md)
 - [Auth package](packages/auth/README.md)
 - [Database package](packages/db/README.md)
+- [Environment package](packages/env/README.md)
 - [Validation package](packages/validators/README.md)
 - [Biome configuration](packages/biome-config/README.md)
 - [TypeScript configuration](packages/typescript-config/README.md)

@@ -9,6 +9,7 @@ their declared package exports.
 | [@repo/api](api/README.md) | oRPC router, auth middleware, Effect integration, and API context. |
 | [@repo/auth](auth/README.md) | Better Auth server instance and Drizzle-backed database instance. |
 | [@repo/db](db/README.md) | PostgreSQL client, Drizzle schema, and migrations. |
+| [@repo/env](env/README.md) | Zod-validated server and browser environment settings. |
 | [@repo/validators](validators/README.md) | Client-safe Zod schemas shared by application forms. |
 | [@repo/biome-config](biome-config/README.md) | Shared formatter, linter, and assist rules. |
 | [@repo/typescript-config](typescript-config/README.md) | Shared TypeScript compiler bases. |
