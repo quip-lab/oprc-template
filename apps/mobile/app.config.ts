@@ -1,6 +1,8 @@
 import type { ExpoConfig } from "expo/config";
 
 const apiUrl = process.env.EXPO_PUBLIC_API_URL?.replace(/\/+$/, "");
+const appIdentifier =
+    process.env.EXPO_APP_IDENTIFIER ?? "com.quip.oprctemplate";
 
 const appConfig: ExpoConfig = {
     name: "mobile",
@@ -11,9 +13,11 @@ const appConfig: ExpoConfig = {
     scheme: "mobile",
     userInterfaceStyle: "automatic",
     ios: {
+        bundleIdentifier: appIdentifier,
         icon: "./assets/expo.icon",
     },
     android: {
+        package: appIdentifier,
         adaptiveIcon: {
             backgroundColor: "#E6F4FE",
             foregroundImage: "./assets/images/android-icon-foreground.png",

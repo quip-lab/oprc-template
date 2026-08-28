@@ -26,7 +26,6 @@ catalog:
   effect: 4.0.0-rc.112
   heroui-native: ^1.0.8
   pg: ^8.23.0
-  react-native-svg: ^15.12.1
   react-hook-form: ^7.86.0
   tailwind-merge: ^3.4.0
   tailwind-variants: ^3.2.2
