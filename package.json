@@ -5,6 +5,8 @@
         "build": "turbo run build",
         "dev": "pnpm run with-env turbo run dev",
         "with-env": "dotenv -e .env --",
+        "db:generate": "pnpm --filter @repo/db db:generate",
+        "db:migrate": "pnpm --filter @repo/db db:migrate",
         "lint": "turbo run lint",
         "format": "biome format --write .",
         "format:check": "biome format .",
