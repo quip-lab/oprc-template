@@ -34,16 +34,17 @@
     "devDependencies": {
         "@types/node": "catalog:",
         "@types/react": "~19.2.2",
-        "dotenv": "catalog:",
+        "dotenv-cli": "catalog:",
         "typescript": "catalog:expo"
     },
     "scripts": {
-        "dev": "expo start",
-        "start": "expo start",
+        "with-env": "dotenv -e ../../.env --",
+        "dev": "pnpm run with-env expo start",
+        "start": "pnpm run with-env expo start",
         "reset-project": "node ./scripts/reset-project.js",
-        "android": "expo start --android",
-        "ios": "expo start --ios",
-        "web": "expo start --web",
+        "android": "pnpm run with-env expo start --android",
+        "ios": "pnpm run with-env expo start --ios",
+        "web": "pnpm run with-env expo start --web",
         "lint": "biome lint .",
         "check-types": "tsc --noEmit"
     },

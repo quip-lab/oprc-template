@@ -6,7 +6,8 @@
         "#/*": "./src/*"
     },
     "scripts": {
-        "dev": "vite dev --port 3000",
+        "with-env": "dotenv -e ../../.env --",
+        "dev": "pnpm run with-env vite dev --port 3000",
         "generate-routes": "tsr generate",
         "build": "vite build",
         "preview": "vite preview",
@@ -32,6 +33,7 @@
         "@types/react": "^19.2.18",
         "@types/react-dom": "^19.2.5",
         "@vitejs/plugin-react": "^6.1.0",
+        "dotenv-cli": "catalog:",
         "typescript": "catalog:",
         "vite": "^8.2.2"
     }

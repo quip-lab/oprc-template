@@ -8,20 +8,21 @@
         "./schema": "./src/schema/index.ts"
     },
     "scripts": {
-        "db:generate": "drizzle-kit generate",
-        "db:migrate": "drizzle-kit migrate",
-        "db:push": "drizzle-kit push",
+        "with-env": "dotenv -e ../../.env --",
+        "db:generate": "pnpm run with-env drizzle-kit generate",
+        "db:migrate": "pnpm run with-env drizzle-kit migrate",
+        "db:push": "pnpm run with-env drizzle-kit push",
         "check-types": "tsc --noEmit",
         "lint": "biome lint ."
     },
     "dependencies": {
-        "dotenv": "catalog:",
         "drizzle-orm": "catalog:",
         "pg": "catalog:"
     },
     "devDependencies": {
         "@repo/typescript-config": "workspace:*",
         "@types/pg": "catalog:",
+        "dotenv-cli": "catalog:",
         "drizzle-kit": "catalog:",
         "typescript": "catalog:"
     }

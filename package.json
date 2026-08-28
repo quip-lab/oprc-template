@@ -3,7 +3,8 @@
     "private": true,
     "scripts": {
         "build": "turbo run build",
-        "dev": "turbo run dev",
+        "dev": "pnpm run with-env turbo run dev",
+        "with-env": "dotenv -e .env --",
         "lint": "turbo run lint",
         "format": "biome format --write .",
         "format:check": "biome format .",
@@ -13,6 +14,7 @@
     "devDependencies": {
         "@biomejs/biome": "catalog:",
         "@repo/biome-config": "workspace:*",
+        "dotenv-cli": "catalog:",
         "turbo": "^2.10.12",
         "typescript": "catalog:"
     },
